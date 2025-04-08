@@ -1,0 +1,43 @@
+name: Deploy Chatbot CMS
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+        
+    - name: Install dependencies (Backend)
+      working-directory: ./chatbot-cms-backend
+      run: npm install
+      
+    - name: Build (Backend)
+      working-directory: ./chatbot-cms-backend
+      run: npm run build
+      
+    - name: Install dependencies (Frontend)
+      working-directory: ./chatbot-cms-frontend
+      run: npm install
+      
+    - name: Build (Frontend)
+      working-directory: ./chatbot-cms-frontend
+      run: npm run build
+      
+    # Add deployment steps for your chosen platform (Heroku, Vercel, etc.)
+    # Example for Heroku:
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: "your-app-name"
+        heroku_email: "your-email@example.com"
