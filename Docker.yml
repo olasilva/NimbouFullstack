@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./chatbot-cms-backend
+    ports:
+      - "3333:3333"
+    environment:
+      - PORT=3333
+      - DRIVE_DISK=local
+      - NODE_ENV=production
+    volumes:
+      - ./chatbot-cms-backend:/app
+      - /app/node_modules
+
+  frontend:
+    build: ./chatbot-cms-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
